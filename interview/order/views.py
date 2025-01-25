@@ -13,3 +13,15 @@ class OrderListCreateView(generics.ListCreateAPIView):
 class OrderTagListCreateView(generics.ListCreateAPIView):
     queryset = OrderTag.objects.all()
     serializer_class = OrderTagSerializer
+
+
+class OrderListBetweenDatesView(generics.ListAPIView):
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        start_date = self.request.query_params.get('start_date')
+        embargo_date = self.request.query_params.get('embargo_date')
+        return Order.objects.filter(
+            start_date__gte=start_date,
+            embargo_date__lte=embargo_date
+        )
