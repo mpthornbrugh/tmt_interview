@@ -4,7 +4,26 @@ from rest_framework.views import APIView
 
 from interview.inventory.models import Inventory, InventoryLanguage, InventoryTag, InventoryType
 from interview.inventory.schemas import InventoryMetaData
-from interview.inventory.serializers import InventoryLanguageSerializer, InventorySerializer, InventoryTagSerializer, InventoryTypeSerializer
+from interview.inventory.serializers import InventoryLanguageSerializer, InventorySerializer, InventoryTagSerializer, InventoryTypeSerializer, InventoryListSerializer
+
+
+class InventoryAfterDateListView(APIView):
+    queryset = Inventory.objects.all()
+    serializer_class = InventoryListSerializer
+
+    def get(self, request: Request, *args, **kwargs) -> Response:
+        # Make sure the date is a datetime object
+        try:
+            kwargs['date'] = datetime.strptime(kwargs['date'], '%Y-%m-%d')
+        except ValueError:
+            return Response({'error': 'Invalid date format. Please use the format YYYY-MM-DD'}, status=400)
+        # Get the queryset of inventories after the date
+        serializer = self.serializer_class(self.get_queryset(date=kwargs['date']), many=True)
+
+        return Response(serializer.data, status=200)
+
+    def get_queryset(self, **kwargs):
+        return self.queryset.filter(created_at__gte=kwargs['date'])
 
 
 class InventoryListCreateView(APIView):
