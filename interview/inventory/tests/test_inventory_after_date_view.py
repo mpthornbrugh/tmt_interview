@@ -1,10 +1,13 @@
 # Create a test for the InventoryAfterDateListView view
+from unittest import TestCase
+
+from interview.inventory.models import Inventory
+from interview.inventory.views import InventoryAfterDateListView
+
+
 class TestInventoryAfterDateListView(TestCase):
     def setUp(self):
         self.view = InventoryAfterDateListView()
-        self.view.queryset = Inventory.objects.all()
-        self.view.serializer_class = InventorySerializer
-        self.view.request = RequestFactory().get('/')
         self.view.kwargs = {'date': '2022-01-01'}
 
         Inventory.objects.create(date='2022-01-01', name='Item 1', quantity=10)
