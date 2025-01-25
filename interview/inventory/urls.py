@@ -12,5 +12,6 @@ urlpatterns = [
     path('languages/', InventoryLanguageListCreateView.as_view(), name='inventory-languages-list'),
     path('tags/', InventoryTagListCreateView.as_view(), name='inventory-tags-list'),
     path('types/', InventoryTypeListCreateView.as_view(), name='inventory-types-list'),
+    path('inventory/<date>/', InventoryAfterDateListView.as_view(), name='inventory-after-date-list'),
     path('', InventoryListCreateView.as_view(), name='inventory-list'),
 ]

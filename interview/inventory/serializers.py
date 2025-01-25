@@ -33,3 +33,12 @@ class InventorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventory
         fields = ['id', 'name', 'type', 'language', 'tags', 'metadata']
+
+
+# Create a serializer that also shows created_at
+class InventoryListSerializer(InventorySerializer):
+    created_at = serializers.DateTimeField()
+
+    class Meta:
+        model = Inventory
+        fields = ['id', 'name', 'type', 'language', 'tags', 'metadata', 'created_at']
